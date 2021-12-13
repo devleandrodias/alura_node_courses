@@ -57,3 +57,23 @@ package
 private
 protected
 public
+
+## JavaScript Array Methods
+
+concat()
+filter()
+find()
+findIndex()
+indexOf()
+lastIndexOf()
+forEach()
+pop()
+shift()
+push()
+unshift()
+reduce()
+reduceRight()
+reverse()
+slice()
+sort()
+splice()
