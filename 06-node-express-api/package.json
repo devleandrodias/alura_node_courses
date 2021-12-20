@@ -1,0 +1,14 @@
+{
+  "author": "Leandro Dias",
+  "description": "Basic APi using ExpressJS",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
