@@ -1,13 +1,8 @@
-const express = require("express");
-
-const app = express();
+const express = require("./config/express.config");
 
 const port = 3000;
+const app = express();
 
 app.listen(port, () => {
   console.log(`Application running on PORT ${port}`);
-});
-
-app.get("/", (req, res, next) => {
-  res.send("Hello express!");
 });
