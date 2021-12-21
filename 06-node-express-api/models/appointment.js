@@ -1,11 +1,29 @@
 const moment = require("moment");
 const connection = require("../infrastructure/mysql.connection");
 
-class Appointment {
-  create(appointment, res) {
-    const formatBR = "DD-MM-YYYY";
-    const formatUS = "YYYY-MM-DD";
+const formatBR = "DD-MM-YYYY";
+const formatUS = "YYYY-MM-DD";
 
+class Appointment {
+  getAll(res) {
+    const query = "SELECT * FROM Appointments";
+
+    connection.query(query, (err, result) => {
+      if (err) res.status(400).json(err);
+      else res.status(200).json(result);
+    });
+  }
+
+  getById(id, res) {
+    const query = `SELECT * FROM Appointments WHERE Id = ${id}`;
+
+    connection.query(query, (err, result) => {
+      if (err) res.status(400).json(err);
+      else res.status(200).json(result);
+    });
+  }
+
+  create(appointment, res) {
     const createdAt = moment().format("YYYY-MM-DD HH:MM");
     const date = moment(appointment.date, formatBR).format(formatUS);
 
@@ -36,16 +54,40 @@ class Appointment {
         createdAt,
       };
 
-      const sql = `INSERT INTO Appointments SET ?`;
+      const query = `INSERT INTO Appointments SET ?`;
 
-      connection.query(sql, model, (err, result) => {
+      connection.query(query, model, (err, result) => {
         if (err) {
           console.error("New appointments not created! Error", err);
           res.status(400).json(err);
         } else {
           console.log("Appointment created with success!");
-          res.status(201).send(result);
+          res.status(201).send(model);
         }
+      });
+    }
+  }
+
+  update(id, appointment, res) {
+    const date = moment(appointment.date, formatBR).format(formatUS);
+
+    const appointmentUpdated = { ...appointment, date };
+
+    const query = `UPDATE Appointments SET ? WHERE Id = ?`;
+
+    connection.query(query, [appointmentUpdated, id], (err, result) => {
+      if (err) res.status(400).json(err);
+      else res.status(200).json({ ...result, appointmentUpdated });
+    });
+  }
+
+  delete(id, res) {
+    {
+      const query = `DELETE FROM Appointments WHERE Id = ${id}`;
+
+      connection.query(query, (err, result) => {
+        if (err) res.status(400).json(err);
+        else res.status(204).json();
       });
     }
   }
