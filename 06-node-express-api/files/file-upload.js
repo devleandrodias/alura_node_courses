@@ -1,23 +1,19 @@
 const fs = require("fs");
 const path = require("path");
 
-const getPathFile = (file) => path.resolve(__dirname, "..", "assets", file);
+const { getPath, getPathImageFile } = require("../helpers/get-path-image-file");
 
-function writeFileNewDogUsingBuffers() {
-  fs.readFile(getPathFile("dog.jpg"), (err, data) => {
-    if (err) console.error(err);
-
-    fs.writeFile(getPathFile("buffer-dog.jpg"), data, (err) => {
-      if (err) console.error(err);
-    });
-  });
+function fileIsValid(extension) {
+  return ["jpg", "png", "jpeg"].includes(extension.substring(1));
 }
+module.exports = (pathFile, file, cb) => {
+  const originalPath = getPath(pathFile);
+  const extension = path.extname(originalPath);
+  const newPath = getPathImageFile(file, extension);
 
-function writeFileNewDogUsingStreams() {
-  fs.createReadStream(getPathFile("dog.jpg"))
-    .pipe(fs.createWriteStream(getPathFile("stream-dog.jpg")))
-    .on("finish", () => console.log("Dog Stream Finish..."));
-}
-
-writeFileNewDogUsingStreams(); // Async
-writeFileNewDogUsingBuffers(); // Sync
+  if (fileIsValid(extension)) {
+    fs.createReadStream(originalPath)
+      .pipe(fs.createWriteStream(newPath))
+      .on("finish", () => cb(newPath));
+  }
+};

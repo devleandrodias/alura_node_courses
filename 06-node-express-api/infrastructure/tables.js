@@ -1,11 +1,12 @@
 class Tables {
   init(connection) {
     this.connection = connection;
+    this.createPets();
     this.createAppointments();
   }
 
   createAppointments() {
-    const sql = `
+    const query = `
       CREATE TABLE IF NOT EXISTS Appointments (
         id int NOT NULL AUTO_INCREMENT, 
         customer VARCHAR(50) NOT NULL,
@@ -19,9 +20,25 @@ class Tables {
       );
     `;
 
-    this.connection.query(sql, (err) => {
+    this.connection.query(query, (err) => {
       if (err) console.error("Table Appointments not created! Error!");
       else console.log("Table Appointments created with success!");
+    });
+  }
+
+  createPets() {
+    const query = `
+      CREATE TABLE IF NOT EXISTS Pets (
+        id int NOT NULL AUTO_INCREMENT, 
+        name VARCHAR(50) NOT NULL,
+        image VARCHAR(300),
+        PRIMARY KEY(id)
+      );
+    `;
+
+    this.connection.query(query, (err) => {
+      if (err) console.error("Table Pets not created! Error!");
+      else console.log("Table Pets created with success!");
     });
   }
 }
