@@ -1,7 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 
-const { getPath, getPathImageFile } = require("../helpers/get-path-image-file");
+const {
+  getPath,
+  getPathImageFile,
+} = require("../../helpers/get-path-image-file");
 
 function fileIsValid(extension) {
   return ["jpg", "png", "jpeg"].includes(extension.substring(1));

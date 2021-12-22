@@ -1,17 +1,15 @@
 const moment = require("moment");
 const axios = require("axios");
-const connection = require("../infrastructure/mysql.connection");
+const connection = require("../infrastructure/database/mysql.connection");
+const appointmentRepository = require("../repository/appointment.repository");
 
 const formatBR = "DD-MM-YYYY";
 const formatUS = "YYYY-MM-DD";
 
 class Appointment {
-  getAll(res) {
-    const query = "SELECT * FROM Appointments";
-
-    connection.query(query, (err, result) => {
-      if (err) res.status(400).json(err);
-      else res.status(200).json(result);
+  getAll() {
+    return new Promise((resolve, reject) => {
+      appointmentRepository.getAll().then((value) => resolve(value));
     });
   }
 
@@ -31,7 +29,7 @@ class Appointment {
     });
   }
 
-  create(appointment, res) {
+  create(appointment) {
     const createdAt = moment().format("YYYY-MM-DD HH:MM");
     const date = moment(appointment.date, formatBR).format(formatUS);
 
@@ -54,7 +52,9 @@ class Appointment {
     const errors = validations.filter((field) => !field.validator);
 
     if (errors.length) {
-      res.status(400).json(errors);
+      return new Promise((_, reject) => {
+        reject(errors);
+      });
     } else {
       const model = {
         ...appointment,
@@ -62,17 +62,9 @@ class Appointment {
         createdAt,
       };
 
-      const query = `INSERT INTO Appointments SET ?`;
-
-      connection.query(query, model, (err, result) => {
-        if (err) {
-          console.error("New appointments not created! Error", err);
-          res.status(400).json(err);
-        } else {
-          console.log("Appointment created with success!");
-          res.status(201).send(model);
-        }
-      });
+      return appointmentRepository
+        .create(model)
+        .then((value) => ({ ...model, id: value.insertId }));
     }
   }
 

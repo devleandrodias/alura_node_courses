@@ -1,6 +1,6 @@
 const moment = require("moment");
-const filesUpload = require("../files/file-upload");
-const connection = require("../infrastructure/mysql.connection");
+const filesUpload = require("../infrastructure/files/file-upload");
+const connection = require("../infrastructure/database/mysql.connection");
 
 class Pet {
   getAll(res) {
