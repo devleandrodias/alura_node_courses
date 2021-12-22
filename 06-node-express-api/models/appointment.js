@@ -1,4 +1,5 @@
 const moment = require("moment");
+const axios = require("axios");
 const connection = require("../infrastructure/mysql.connection");
 
 const formatBR = "DD-MM-YYYY";
@@ -17,9 +18,16 @@ class Appointment {
   getById(id, res) {
     const query = `SELECT * FROM Appointments WHERE Id = ${id}`;
 
-    connection.query(query, (err, result) => {
-      if (err) res.status(400).json(err);
-      else res.status(200).json(result);
+    connection.query(query, async (err, result) => {
+      if (err) {
+        res.status(400).json(err);
+      } else {
+        // External APIs
+        const appointment = result[0];
+        const cpf = appointment.customer;
+        const { data } = await axios.get(`http://localhost:8082/${cpf}`);
+        res.status(200).json({ ...appointment, ...data });
+      }
     });
   }
 

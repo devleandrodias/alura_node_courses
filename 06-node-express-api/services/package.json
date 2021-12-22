@@ -1,0 +1,12 @@
+{
+  "author": "Leandro Dias",
+  "description": "Customer API",
+  "scripts": {
+    "start": "node customer.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "express": "^4.17.2",
+    "faker": "^5.5.3"
+  }
+}

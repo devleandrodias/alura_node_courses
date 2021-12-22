@@ -8,6 +8,7 @@
     "configure-down": "cd .\\.docker && docker-compose down"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "body-parser": "^1.19.1",
     "consign": "^0.1.6",
     "dotenv": "^10.0.0",
