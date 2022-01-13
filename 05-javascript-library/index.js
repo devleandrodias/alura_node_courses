@@ -3,16 +3,33 @@ import { resolve } from "path";
 
 import chalk from "chalk";
 
+function extractLinks(text) {
+  const regex = new RegExp(/\[([^\]]*)\]\((https?:\/\/[^$#\s].[^\s]*)\)/gm);
+
+  const results = [];
+
+  let temp;
+
+  while ((temp = regex.exec(text)) !== null) {
+    results.push({
+      [temp[1]]: temp[2],
+    });
+  }
+
+  return results;
+}
+
 async function readBlogFileAsync(fileName) {
   const path = resolve("files", fileName);
 
   try {
-    const data = await promises.readFile(path, "utf-8");
-    console.log(chalk.green(data));
+    const text = await promises.readFile(path, "utf-8");
+
+    console.log(extractLinks(text));
   } catch (error) {
     throw new Error(chalk.red(error));
   } finally {
-    console.log(chalk.yellow("Operation completed"));
+    console.log(chalk.yellow("\nOperation completed"));
   }
 }
 
