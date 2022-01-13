@@ -1,11 +1,19 @@
+import { promises } from "fs";
+import { resolve } from "path";
+
 import chalk from "chalk";
 
-console.log(chalk.red("Leandro"));
-console.log(chalk.green("Thaísa"));
-console.log(chalk.black.bgYellow("Alura"));
+async function readBlogFileAsync(fileName) {
+  const path = resolve("files", fileName);
 
-console.log(`
-  CPU: ${chalk.red("90%")}
-  RAM: ${chalk.green("40%")}
-  DISK: ${chalk.yellow("70%")}
-`);
+  try {
+    const data = await promises.readFile(path, "utf-8");
+    console.log(chalk.green(data));
+  } catch (error) {
+    throw new Error(chalk.red(error));
+  } finally {
+    console.log(chalk.yellow("Operation completed"));
+  }
+}
+
+readBlogFileAsync("blog.md");
