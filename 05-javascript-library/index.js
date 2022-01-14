@@ -1,5 +1,4 @@
 import { promises } from "fs";
-import { resolve } from "path";
 
 import chalk from "chalk";
 
@@ -16,21 +15,15 @@ function extractLinks(text) {
     });
   }
 
-  return results;
+  return !results.length ? "No links" : results;
 }
 
-async function readBlogFileAsync(fileName) {
-  const path = resolve("files", fileName);
-
+export async function readBlogFileAsync(path) {
   try {
-    const text = await promises.readFile(path, "utf-8");
-
-    console.log(extractLinks(text));
+    return extractLinks(await promises.readFile(path, "utf-8"));
   } catch (error) {
     throw new Error(chalk.red(error));
   } finally {
     console.log(chalk.yellow("\nOperation completed"));
   }
 }
-
-readBlogFileAsync("blog.md");
