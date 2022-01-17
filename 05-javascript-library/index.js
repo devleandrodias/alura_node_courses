@@ -24,6 +24,6 @@ export async function readBlogFileAsync(path) {
   } catch (error) {
     throw new Error(chalk.red(error));
   } finally {
-    console.log(chalk.yellow("\nOperation completed"));
+    console.log(chalk.yellow("\nOperation completed\n"));
   }
 }
