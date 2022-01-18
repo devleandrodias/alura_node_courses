@@ -1,6 +1,6 @@
-import chalk from "chalk";
-import { readBlogFileAsync } from "./index.js";
-import { validateUrls } from "./http-validation.js";
+const chalk = require("chalk");
+const { readBlogFileAsync } = require("./index.js");
+const { validateUrls } = require("./http-validation.js");
 
 async function processText(pathFile) {
   const links = await readBlogFileAsync(pathFile[2]);

@@ -1,6 +1,6 @@
-import { promises } from "fs";
+const { promises } = require("fs");
 
-import chalk from "chalk";
+const chalk = require("chalk");
 
 function extractLinks(text) {
   const regex = new RegExp(/\[([^\]]*)\]\((https?:\/\/[^$#\s].[^\s]*)\)/gm);
@@ -18,7 +18,7 @@ function extractLinks(text) {
   return !results.length ? "No links" : results;
 }
 
-export async function readBlogFileAsync(path) {
+async function readBlogFileAsync(path) {
   try {
     return extractLinks(await promises.readFile(path, "utf-8"));
   } catch (error) {
@@ -27,3 +27,5 @@ export async function readBlogFileAsync(path) {
     console.log(chalk.yellow("\nOperation completed\n"));
   }
 }
+
+module.exports = { readBlogFileAsync };

@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+const fetch = require("node-fetch");
 
 function generateArrayOfUrls(arrayLinks) {
   return arrayLinks.map((x) => Object.values(x).join());
@@ -12,7 +12,7 @@ async function checkUrlStatus(arrayUrls) {
   }
 }
 
-export async function validateUrls(arrayLinks) {
+async function validateUrls(arrayLinks) {
   const urls = generateArrayOfUrls(arrayLinks);
 
   const status = await checkUrlStatus(urls);
@@ -22,3 +22,5 @@ export async function validateUrls(arrayLinks) {
     status: status[index],
   }));
 }
+
+module.exports = { validateUrls };
