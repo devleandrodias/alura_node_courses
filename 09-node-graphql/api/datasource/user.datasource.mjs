@@ -24,7 +24,7 @@ export class UsersApi extends RESTDataSource {
     };
   }
 
-  async addUser(user) {
+  async addUser({ user }) {
     const users = await this.get("/users");
 
     const role = (await this.get(`/roles?type=${user.role}`))[0];
@@ -35,27 +35,39 @@ export class UsersApi extends RESTDataSource {
 
     await this.post("/users", user);
 
-    return this.getUserById(user.id);
+    return {
+      code: 200,
+      message: "User successfully created!",
+      user: await this.getUserById(user.id),
+    };
   }
 
-  async updateUser(user) {
+  async updateUser({ id, user }) {
     const role = (await this.get(`/roles?type=${user.role}`))[0];
 
     const updateUser = {
-      id: user.id,
+      id,
+      role: role.id,
       name: user.name,
       email: user.email,
       active: user.active,
-      role: role.id,
     };
 
-    await this.put(`/users/${user.id}`, updateUser);
+    await this.put(`/users/${id}`, updateUser);
 
-    return this.getUserById(user.id);
+    return {
+      code: 200,
+      message: "User successfully updated!",
+      user: await this.getUserById(id),
+    };
   }
 
   async deleteUser({ id }) {
     await this.delete(`/users/${id}`);
-    return id;
+
+    return {
+      code: 200,
+      message: "User successfully deleted!",
+    };
   }
 }

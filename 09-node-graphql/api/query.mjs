@@ -1,6 +1,14 @@
 import { gql } from "apollo-server";
 
 export const query = gql`
+  scalar DateTime
+
+  enum RolesType {
+    ESTUDANTE
+    DOCENTE
+    COORDENACAO
+  }
+
   type Query {
     users: [User]
     user(id: ID!): User
@@ -8,21 +16,8 @@ export const query = gql`
   }
 
   type Mutation {
-    addUser(
-      name: String!
-      active: Boolean!
-      email: String!
-      role: String!
-    ): User!
-
-    updateUser(
-      id: ID!
-      name: String!
-      active: Boolean!
-      email: String!
-      role: String!
-    ): User!
-
-    deleteUser(id: ID!): ID!
+    addUser(user: UserInput): CreateUserResponse!
+    updateUser(id: ID!, user: UserInput): UpdateUserResponse!
+    deleteUser(id: ID!): DeleteUserResponse!
   }
 `;
