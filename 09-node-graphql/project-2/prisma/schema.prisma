@@ -14,10 +14,11 @@ model Post {
   autorId   Int
   publicado Boolean  @default(false)
   createdAt DateTime @default(now()) @db.Timestamp(0)
-  autor     User    @relation(fields: [autorId], references: [id], onUpdate: Restrict, map: "posts_ibfk_1")
+  autor     User     @relation(fields: [autorId], references: [id], onUpdate: Restrict, map: "posts_ibfk_1")
 
   @@index([autorId], map: "autorId")
-  @@map("posts")
+  @@map(name: "posts")
+  Review Review[]
 }
 
 model User {
@@ -27,5 +28,17 @@ model User {
   createdAt DateTime @default(now()) @db.Timestamp(0)
   posts     Post[]
 
-  @@map("users")
+  @@map(name: "users")
+  Review Review[]
+}
+
+model Review {
+  id         Int  @id @default(autoincrement())
+  postId     Int
+  post       Post @relation(fields: [postId], references: [id])
+  reviewerId Int
+  reviewer   User @relation(fields: [reviewerId], references: [id])
+  nota       Int
+
+  @@map(name: "reviews")
 }
